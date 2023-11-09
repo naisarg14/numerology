@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Numerology Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            margin: 10px;
+            font-size: 18px;
+            border: 2px solid #333;
+            border-radius: 5px;
+        }
+
+        p {
+            font-size: 24px;
+            color: #333;
+        }
+
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            border: 1px solid #050303; /* Add border to the entire table */
+            width: 80%;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #333; /* Add border to cells */
+        }
+
+        .letters {
+            font-weight: bold;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            color: grey;
+            text-align: center;
+}
+    </style>
+</head>
+<body>
+    <h1>Numerology Calculator</h1>
+    <input type="text" id="nameInput" placeholder="Enter your Name">
+    <p id="result"></p>
+
+    <table id="letterNumberTable">
+        <tbody>
+            <tr class="letters"></tr>
+            <tr></tr>
+        </tbody>
+    </table>
+
+    <script>
+        const letterValues = {
+            'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5, 'f': 6, 'g': 7, 'h': 8, 'i': 9,
+            'j': 1, 'k': 2, 'l': 3, 'm': 4, 'n': 5, 'o': 6, 'p': 7, 'q': 8, 'r': 9,
+            's': 1, 't': 2, 'u': 3, 'v': 4, 'w': 5, 'x': 6, 'y': 7, 'z': 8
+        };
+
+        function calculateName(name) {
+            name = name.toLowerCase().replace(/ /g, '');
+            let sum = 0;
+            for (const char of name) {
+                if (!isNaN(char)) {
+                    sum += parseInt(char);
+                } else if (letterValues[char]) {
+                    sum += letterValues[char];
+                }
+            }
+            return sum;
+        }
+
+        function addDigits(n) {
+            let sum = 0;
+            for (const digit of n.toString()) {
+                sum += parseInt(digit);
+            }
+            if (sum <= 9) {
+                return sum;
+            } else {
+                return addDigits(sum);
+            }
+        }
+
+        const nameInput = document.getElementById("nameInput");
+        const result = document.getElementById("result");
+        const table = document.getElementById("letterNumberTable");
+        const lettersRow = table.getElementsByClassName("letters")[0];
+        const numbersRow = table.getElementsByTagName("tr")[1];
+
+        nameInput.addEventListener("input", () => {
+            const inputName = nameInput.value;
+            const numerologyValue = addDigits(calculateName(inputName));
+            result.textContent = "Numerology: " + numerologyValue;
+
+            // Clear the table
+            lettersRow.innerHTML = '';
+            numbersRow.innerHTML = '';
+
+            // Populate the table with letter-number correspondence
+            for (const char of inputName) {
+                if (letterValues[char]) {
+                    const letterCell = document.createElement("td");
+                    letterCell.textContent = char;
+                    lettersRow.appendChild(letterCell);
+
+                    const numberCell = document.createElement("td");
+                    numberCell.textContent = letterValues[char];
+                    numbersRow.appendChild(numberCell);
+                }
+            }
+        });
+    </script>
+</body>
+<footer>Made for Bhawna Patel by Naisarg Patel</footer>
+</html>
